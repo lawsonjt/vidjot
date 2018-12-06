@@ -102,7 +102,25 @@ app.post('/ideas', (req, res) => {
 
 // Edit Form process
 app.put('/ideas/:id', (req, res) => {
-    res.send('PUT');
+    Idea.findOne({ _id: req.params.id })
+        .then(idea => {
+            // new values
+            idea.title = req.body.title;
+            idea.details = req.body.details;
+
+            idea.save()
+                .then(idea => {
+                    res.redirect('/ideas');
+                })
+        });
+});
+
+// Delete Idea
+app.delete('/ideas/:id', (req, res) => {
+    Idea.remove({ _id: req.params.id })
+        .then(() => {
+            res.redirect('/ideas');
+        });
 });
 
 const port = 5000;
